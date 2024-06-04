@@ -38,3 +38,22 @@ def updateCategory(request):
     category.name = name
     category.save()
     return JsonResponse({"status": "success"})
+
+
+
+
+@csrf_exempt
+def add_item(request):
+    name = request.POST.get('name')
+    category_id = request.POST.get('category_id')
+    category = Category.objects.get(id=category_id)
+    item = Item(name=name, category=category)
+    item.save()
+    return JsonResponse({"status": "success"})
+
+@csrf_exempt
+def get_items(request):
+    category_id = request.POST.get('category_id')
+    items = Item.objects.filter(category=category_id)
+    items = [item.name for item in items] # get the names of the items
+    return JsonResponse({"status":"success","items": items})
