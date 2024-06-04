@@ -7,6 +7,17 @@ from .models import Category, Item, List
 def personPage(request):
     return JsonResponse({"status": "success"})
 
+@csrf_exempt
 def getPersonalCategory(request):
-    id = request.GET.get('id')
-    category = Category.objects.get(id=id)
+    UUID = request.POST.get('UUID')
+    categories = Category.objects.filter(UUID=UUID)
+    category_names = [category.name for category in categories]
+    return JsonResponse({"status":"success","category_names": category_names})
+
+@csrf_exempt
+def addCategory(request):
+    name = request.POST.get('name')
+    UUID = request.POST.get('UUID')
+    category = Category(name=name,UUID=UUID)
+    category.save()
+    return JsonResponse({"status": "success"})
