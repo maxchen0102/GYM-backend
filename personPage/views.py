@@ -21,3 +21,20 @@ def addCategory(request):
     category = Category(name=name,UUID=UUID)
     category.save()
     return JsonResponse({"status": "success"})
+
+
+@csrf_exempt
+def deleteCategory(request):
+    id = request.POST.get('id')
+    category = Category.objects.get(id=id)
+    category.delete()
+    return JsonResponse({"status": "success"})
+
+@csrf_exempt
+def updateCategory(request):
+    id = request.POST.get('id')
+    name = request.POST.get('name') # new name
+    category = Category.objects.get(id=id) # get the category
+    category.name = name
+    category.save()
+    return JsonResponse({"status": "success"})
