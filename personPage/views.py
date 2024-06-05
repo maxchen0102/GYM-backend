@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Category, Item, List
 # Create your views here.
+#hello world 
 
 def personPage(request):
     return JsonResponse({"status": "success"})
