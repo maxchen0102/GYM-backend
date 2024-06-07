@@ -19,5 +19,6 @@ urlpatterns = [
     path('update_item/', views.update_item, name='update_item'),
 
     # Lists
+    path('get_record_list/', views.get_record_list, name='add_record_list'),
     path('add_record_list/', views.add_record_list, name='add_record_list'),
 ]

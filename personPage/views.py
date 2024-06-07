@@ -87,9 +87,18 @@ def update_item(request):
     return JsonResponse({"status": "success"})
 
 @csrf_exempt
+def get_record_list(request):
+    item_id = request.POST.get('item_id')
+    items = List.objects.filter(item_id=item_id)
+    items = [item.name for item in items]
+    return JsonResponse({"status": "success","items": items})
+
+
+@csrf_exempt
 def add_record_list(request):
+    name = request.POST.get('name')
     item_id = request.POST.get('item_id')
     item = Item.objects.get(id=item_id)
-    record = List(item=item)
+    record = List(name=name, item=item)
     record.save()
     return JsonResponse({"status": "success"})
