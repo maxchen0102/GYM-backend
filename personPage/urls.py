@@ -14,5 +14,10 @@ urlpatterns = [
 
     # items
     path('add_item/', views.add_item, name='add_item'),
-    path('get_items/', views.getItems, name='items'),
+    path('get_items/', views.get_items, name='items'),
+    path('delete_item/', views.delete_item, name='delete_item'),
+    path('update_item/', views.update_item, name='update_item'),
+
+    # Lists
+    path('add_record_list/', views.add_record_list, name='add_record_list'),
 ]

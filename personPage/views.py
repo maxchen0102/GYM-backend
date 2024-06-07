@@ -8,13 +8,16 @@ from .models import Category, Item, List
 def personPage(request):
     return JsonResponse({"status": "success"})
 
+
+# 取得分類
 @csrf_exempt
 def getPersonalCategory(request):
-    UUID = request.POST.get('UUID')
+    UUID = request.POST.get('UUID') # get the UUID
     categories = Category.objects.filter(UUID=UUID)
     category_names = [category.name for category in categories]
     return JsonResponse({"status":"success","category_names": category_names})
 
+# 新增分類
 @csrf_exempt
 def addCategory(request):
     name = request.POST.get('name')
@@ -24,6 +27,7 @@ def addCategory(request):
     return JsonResponse({"status": "success"})
 
 
+# 刪除分類
 @csrf_exempt
 def deleteCategory(request):
     id = request.POST.get('id')
@@ -31,30 +35,61 @@ def deleteCategory(request):
     category.delete()
     return JsonResponse({"status": "success"})
 
+# 更新分類
 @csrf_exempt
 def updateCategory(request):
-    id = request.POST.get('id')
-    name = request.POST.get('name') # new name
-    category = Category.objects.get(id=id) # get the category
-    category.name = name
+    category_id = request.POST.get('category_id')     # category id
+    category_new_name = request.POST.get('category_new_name')  # new name
+    category = Category.objects.get(id=category_id)  # get the category
+    category.name = category_new_name
     category.save()
     return JsonResponse({"status": "success"})
 
 
 
 
+# 新增此分類之健身項目
 @csrf_exempt
 def add_item(request):
     name = request.POST.get('name')
-    category_id = request.POST.get('category_id')
+    category_id = request.POST.get('category_id')  # 取得category_id外鍵
     category = Category.objects.get(id=category_id)
     item = Item(name=name, category=category)
     item.save()
     return JsonResponse({"status": "success"})
 
+
+# 取得此分類之健身項目
 @csrf_exempt
 def get_items(request):
-    category_id = request.POST.get('category_id')
+    category_id = request.POST.get('category_id') # 用分類id取得所有屬於此分類的健身項目
     items = Item.objects.filter(category=category_id)
     items = [item.name for item in items] # get the names of the items
     return JsonResponse({"status":"success","items": items})
+
+
+# 刪除此分類之健身項目
+@csrf_exempt
+def delete_item(request):
+    item_id = request.POST.get('item_id') # 取得此item的id
+    item = Item.objects.get(id=item_id)
+    item.delete()
+    return JsonResponse({"status": "success"})
+
+# 更新此分類之健身項目
+@csrf_exempt
+def update_item(request):
+    item_id = request.POST.get('item_id')
+    name = request.POST.get('name')
+    item = Item.objects.get(id=item_id)
+    item.name = name
+    item.save()
+    return JsonResponse({"status": "success"})
+
+@csrf_exempt
+def add_record_list(request):
+    item_id = request.POST.get('item_id')
+    item = Item.objects.get(id=item_id)
+    record = List(item=item)
+    record.save()
+    return JsonResponse({"status": "success"})
