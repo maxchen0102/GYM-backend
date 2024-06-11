@@ -1,7 +1,13 @@
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+import json
 from .models import Category, Item, List
+
+
+
 # Create your views here.
 #hello world 
 
@@ -71,7 +77,7 @@ def get_items(request):
 # 刪除此分類之健身項目
 @csrf_exempt
 def delete_item(request):
-    item_id = request.POST.get('item_id') # 取得此item的id
+    item_id = request.POST.get('item_id')  # 取得此item的id
     item = Item.objects.get(id=item_id)
     item.delete()
     return JsonResponse({"status": "success"})
@@ -102,3 +108,37 @@ def add_record_list(request):
     record = List(name=name, item=item)
     record.save()
     return JsonResponse({"status": "success"})
+
+@csrf_exempt
+@require_http_methods(["DELETE"])
+def delete_record_list(request):
+    try :
+        data = json.loads(request.body)
+        record_id = data['record_id']
+        record = List.objects.get(id=record_id)
+        record.delete()
+        return JsonResponse({"status": "success"})
+    except List.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Record not found."}, status=404)
+
+
+@csrf_exempt
+@require_http_methods(["PUT"])
+def update_record_list(request):
+    try :
+        data=json.loads(request.body)
+        record_id = data['record_id']
+        name=data.get('name')
+
+        if not record_id or not name :
+            return JsonResponse({"status": "fail"})
+        record = List.objects.get(id=record_id)
+        record.name = name
+        record.save()
+        return JsonResponse({"status": "success"})
+    except List.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Record not found."}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({"status": "error", "message": "Invalid JSON data"}, status=400)
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=400)

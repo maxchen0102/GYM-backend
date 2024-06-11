@@ -21,4 +21,6 @@ urlpatterns = [
     # Lists
     path('get_record_list/', views.get_record_list, name='add_record_list'),
     path('add_record_list/', views.add_record_list, name='add_record_list'),
+    path('delete_record_list/', views.delete_record_list, name='delete_record_list'),
+    path('update_record_list/', views.update_record_list, name='update_record_list'),
 ]
