@@ -1,11 +1,9 @@
-
-from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 import json
 from .models import Category, Item, List
-from .utils import hello_decorator
+from utils import hello_decorator
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response

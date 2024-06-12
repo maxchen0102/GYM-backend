@@ -29,3 +29,15 @@ def enroll(request):
     user = User(username=username, password=password, phone=phone, email=email)
     user.save()
     return JsonResponse({"status": "success"})
+
+
+# 使用django內建方法註冊登入
+@csrf_exempt
+def enroll2(request):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    if username and password:
+        user=User.objects.create_user(username=username, password=password)
+        return JsonResponse({"status": "success"})
+    return JsonResponse({"status": "error"})
+
