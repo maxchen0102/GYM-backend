@@ -5,7 +5,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 import json
 from .models import Category, Item, List
+from .utils import hello_decorator
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.exceptions import APIException
+from rest_framework import status
 
 
 # Create your views here.
@@ -94,13 +99,18 @@ def update_item(request):
 
 @csrf_exempt
 def get_record_list(request):
-    item_id = request.POST.get('item_id')
-    items = List.objects.filter(item_id=item_id)
-    items = [item.name for item in items]
-    return JsonResponse({"status": "success","items": items})
-
+    try:
+        item_id = request.POST.get('item_id')
+        items = List.objects.filter(item_id=item_id)
+        items = [item.name for item in items]
+        return JsonResponse({"status": "success","items": items})
+    except List.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Record not found."}, status=404)
+    except Exception as e:
+        return JsonResponse({"status": "無法預期錯誤", "message": str(e)}, status=400)
 
 @csrf_exempt
+@require_http_methods(["POST"])
 def add_record_list(request):
     name = request.POST.get('name')
     item_id = request.POST.get('item_id')
@@ -109,19 +119,34 @@ def add_record_list(request):
     record.save()
     return JsonResponse({"status": "success"})
 
+# @csrf_exempt
+# @require_http_methods(["DELETE"])
+# def delete_record_list(request):
+#     try :
+#         data = json.loads(request.body)
+#         record_id = data['record_id']
+#         record = List.objects.get(id=record_id)
+#         record.delete()
+#         return JsonResponse({"status": "xxxx", "message": "xxxxx"})
+#     except List.DoesNotExist:
+#         return JsonResponse({"status": "xxxx", "message": "xxxxx"}, status=404)
 @csrf_exempt
-@require_http_methods(["DELETE"])
+@api_view(['DELETE'])
 def delete_record_list(request):
-    try :
+    try:
         data = json.loads(request.body)
         record_id = data['record_id']
         record = List.objects.get(id=record_id)
         record.delete()
-        return JsonResponse({"status": "success"})
+        return Response({"status": "success", "message": "Record deleted successfully."}, status=status.HTTP_200_OK)
+    except json.JSONDecodeError:
+        raise APIException("Invalid JSON format.")
+    except KeyError:
+        raise APIException("Record ID not provided.")
     except List.DoesNotExist:
-        return JsonResponse({"status": "error", "message": "Record not found."}, status=404)
-
-
+        raise APIException("Record not found.", status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        raise APIException(str(e))
 @csrf_exempt
 @require_http_methods(["PUT"])
 def update_record_list(request):
@@ -142,3 +167,20 @@ def update_record_list(request):
         return JsonResponse({"status": "error", "message": "Invalid JSON data"}, status=400)
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)}, status=400)
+
+class NONO(Exception):
+    pass
+
+
+@csrf_exempt
+@hello_decorator
+def test(request, name):
+    print(name)
+    try :
+        data=json.loads(request.body)
+        body_name = data['name']
+        print(body_name)
+        raise NONO("nono")
+    except NONO as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=400)
+    return JsonResponse({"status": "success 我只是做測試的別看我"})
