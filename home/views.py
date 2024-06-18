@@ -7,18 +7,19 @@ from .models import User
 # Create your views here.
 
 def home(request):
-    return JsonResponse({"status": "success"})
+    return render(request, 'login.html')
 
 
 @csrf_exempt
 def login(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
-    user = User.objects.filter(username=username, password=password)
-    if user.exists():
-        return JsonResponse({"status": "success"})
-    else:
-        return JsonResponse({"status": "error"})
+    # user = User.objects.filter(username=username, password=password)
+    # if user.exists():
+    #     return JsonResponse({"status": "success"})
+    # else:
+    #     return JsonResponse({"status": "error"})
+    return JsonResponse({"status": "success" , "username": username, "password": password})
 
 @csrf_exempt
 def enroll(request):
