@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.exceptions import APIException
 from rest_framework import status
+from django.shortcuts import render
 
 
 # Create your views here.
@@ -172,13 +173,28 @@ class NONO(Exception):
 
 @csrf_exempt
 @hello_decorator
-def test(request, name):
-    print(name)
-    try :
-        data=json.loads(request.body)
-        body_name = data['name']
-        print(body_name)
-        raise NONO("nono")
-    except NONO as e:
-        return JsonResponse({"status": "error", "message": str(e)}, status=400)
-    return JsonResponse({"status": "success 我只是做測試的別看我"})
+def test(request, name, mode):
+    if mode == 1:
+        age = 30
+        string = f"helle{name},you are {age}"
+        print(string)
+        try:
+            data=json.loads(request.body)
+            body_name = data['name']
+            print(body_name)
+
+        except NONO as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+        return JsonResponse({"status": "success 我只是做測試的別看我"})
+    else:
+        print("template mode")
+        companys=["company1","company2","company3"]
+        options=["name1","name2","name3"    ]
+        items = [
+            {'name': 'Apple', 'id': 1, 'category': 'fruit'},
+            {'name': 'Banana', 'id': 2, 'category': 'fruit'},
+            {'name': 'Carrot', 'id': 3, 'category': 'vegetable'},
+        ]
+        data={"companys":companys,"options":options,"items":items}
+        return render(request, "index.html",data)
+

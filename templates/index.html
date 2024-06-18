@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<!--Bootstrap 4.5.2  -->
+       <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!--JQuery  -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<h1>hello world </h1>
+<button type="button" class="btn btn-primary">Primary</button>
+<div class="container">
+    <h1>Table with Select Example</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Common Name</th>
+                <th>Attributes</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for company in companys %}
+           <tr>
+               <td>{{ company }} </td>
+             <td>
+                    <select id="select" name="select ">
+                          {% for option in options %}
+                            <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+             </td>
+           </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<label for="select">Choose an option:</label>
+    <select id="select" name="select ">
+        {% for option in options %}
+        <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+    </select>
+
+<div class="container">
+    <h1>Custom Attributes Example</h1>
+    <ul>
+        {% for item in items %}
+        <li data-id="{{ item.id }}" data-category="{{ item.category }}">{{ item.name }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+{% load static %}
+<script src="{% static 'personPage/js/script.js' %}"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

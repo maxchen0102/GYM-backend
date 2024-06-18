@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     path('', views.personPage, name='personPage'),
-    path('test/<str:name>', views.test, name='test'),
+    path('test/<str:name>/<int:mode>/', views.test, name='test'),
 
     # categories
     path('get_category/', views.getPersonalCategory, name='category'),
