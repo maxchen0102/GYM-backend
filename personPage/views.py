@@ -190,6 +190,8 @@ def test(request, name, mode):
         print("template mode")
         companys=["company1","company2","company3"]
         options=["name1","name2","name3"    ]
+
+
         items = [
             {'name': 'Apple', 'id': 1, 'category': 'fruit'},
             {'name': 'Banana', 'id': 2, 'category': 'fruit'},
