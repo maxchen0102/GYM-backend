@@ -38,9 +38,11 @@ INSTALLED_APPS = [
     'home',
     'personPage',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -126,3 +128,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/sign_in/'  # 登入頁面
 SESSION_COOKIE_NAME = 'sessionidG'  # sessionid cookie名稱
 SESSION_COOKIE_AGE = 1000  # sessionid cookie過期時間
+CORS_ALLOW_ALL_ORIGINS = True
