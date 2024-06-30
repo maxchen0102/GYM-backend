@@ -13,7 +13,7 @@ from .forms import UserCreationForm
 
 
 # Create your views here.
-
+# Create your views here.
 
 def home(request):
     return redirect('sign_in')
