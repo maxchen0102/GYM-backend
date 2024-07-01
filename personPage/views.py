@@ -30,9 +30,12 @@ def getPersonalCategory(request):
 # 新增分類
 @csrf_exempt
 def addCategory(request):
-    name = request.POST.get('name')
-    UUID = request.POST.get('UUID')
-    category = Category(name=name,UUID=UUID)
+    # name = request.POST.get('name')
+    # UUID = request.POST.get('UUID')  # user id or something
+    data = json.loads(request.body)
+    name = data.get('name')
+    UUID = data.get('UUID')  # user id or something
+    category = Category(name=name, UUID=UUID)
     category.save()
     return JsonResponse({"status": "success"})
 
