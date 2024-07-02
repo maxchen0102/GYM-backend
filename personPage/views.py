@@ -79,9 +79,10 @@ def add_item(request):
 def get_items(request):
     data = json.loads(request.body)
     category_id = data.get('category_id')  # 用分類id取得所有屬於此分類的健身項目
+    category_name = Category.objects.get(id=category_id).name
     items = Item.objects.filter(category=category_id)
     item_list = [{"id": item.id,"name": item.name} for item in items]
-    return JsonResponse({"status": "success", "item_list": item_list})
+    return JsonResponse({"status": "success", "item_list": item_list, "category_name": category_name})
 
 
 # 刪除此分類之健身項目
