@@ -77,10 +77,11 @@ def add_item(request):
 # 取得此分類之健身項目
 @csrf_exempt
 def get_items(request):
-    category_id = request.POST.get('category_id') # 用分類id取得所有屬於此分類的健身項目
+    data = json.loads(request.body)
+    category_id = data.get('category_id')  # 用分類id取得所有屬於此分類的健身項目
     items = Item.objects.filter(category=category_id)
-    items = [item.name for item in items] # get the names of the items
-    return JsonResponse({"status":"success","items": items})
+    item_list = [{"id": item.id,"name": item.name} for item in items]
+    return JsonResponse({"status": "success", "item_list": item_list})
 
 
 # 刪除此分類之健身項目
@@ -104,10 +105,11 @@ def update_item(request):
 @csrf_exempt
 def get_record_list(request):
     try:
-        item_id = request.POST.get('item_id')
+        data = json.loads(request.body)
+        item_id = data['item_id']
         items = List.objects.filter(item_id=item_id)
         items = [item.name for item in items]
-        return JsonResponse({"status": "success","items": items})
+        return JsonResponse({"status": "success", "items": items})
     except List.DoesNotExist:
         return JsonResponse({"status": "error", "message": "Record not found."}, status=404)
     except Exception as e:
