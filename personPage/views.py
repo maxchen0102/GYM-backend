@@ -107,9 +107,10 @@ def get_record_list(request):
     try:
         data = json.loads(request.body)
         item_id = data['item_id']
-        items = List.objects.filter(item_id=item_id)
-        items = [item.name for item in items]
-        return JsonResponse({"status": "success", "items": items})
+        records = List.objects.filter(item_id=item_id)
+        item_name = Item.objects.get(id=item_id).name
+        records_list = [{"id": record.id, "name": record.name} for record in records]
+        return JsonResponse({"status": "success", "records_list": records_list, "item_name": item_name})
     except List.DoesNotExist:
         return JsonResponse({"status": "error", "message": "Record not found."}, status=404)
     except Exception as e:
