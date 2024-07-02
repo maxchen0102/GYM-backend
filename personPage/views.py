@@ -22,16 +22,18 @@ def personPage(request):
 # 取得分類
 @csrf_exempt
 def getPersonalCategory(request):
-    UUID = request.POST.get('UUID')  # get the UUID
+    data = json.loads(request.body)
+    UUID = data.get('UUID')
     categories = Category.objects.filter(UUID=UUID)
-    category_names = [category.name for category in categories]
-    return JsonResponse({"status": "success", "category_names": category_names})
+    category_list = [{"id": category.id, "name": category.name} for category in categories]
+
+    return JsonResponse({"status": "success", "categories": category_list})  # all data  contain category id and name
 
 # 新增分類
 @csrf_exempt
 def addCategory(request):
     # name = request.POST.get('name')
-    # UUID = request.POST.get('UUID')  # user id or something
+    # UUID = request.POST.get('UUID')  # user id or somethin
     data = json.loads(request.body)
     name = data.get('name')
     UUID = data.get('UUID')  # user id or something
