@@ -45,10 +45,14 @@ def addCategory(request):
 # 刪除分類
 @csrf_exempt
 def deleteCategory(request):
-    id = request.POST.get('id')
-    category = Category.objects.get(id=id)
-    category.delete()
-    return JsonResponse({"status": "success"})
+    try:
+        data = json.loads(request.body)
+        id = data.get('id')
+        category = Category.objects.get(id=id)
+        category.delete()
+        return JsonResponse({"status": "success"})
+    except Category.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Category not found."}, status=404)
 
 # 更新分類
 @csrf_exempt
