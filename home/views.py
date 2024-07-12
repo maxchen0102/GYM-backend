@@ -19,7 +19,7 @@ def home(request):
     return redirect('sign_in')
 
 
-def logout_view(request):
+def sign_out(request):
     logout(request)
     return redirect('sign_in')
 
@@ -40,7 +40,7 @@ def sign_in(request):
 
 
 @csrf_exempt
-def enroll(request):
+def sign_up(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
