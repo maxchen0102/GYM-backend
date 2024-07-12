@@ -31,7 +31,9 @@ def sign_in(request):
             user = form.get_user()
             login(request, user)
             #return redirect('introduce_page')
-            return JsonResponse({"status": "success"})
+            print("ok")
+            return JsonResponse({"status": "success"}, status=200)
+
         else:
             return JsonResponse({"status": "error"})
     else:
