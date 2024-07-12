@@ -30,7 +30,8 @@ def sign_in(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('introduce_page')
+            #return redirect('introduce_page')
+            return JsonResponse({"status": "success"})
         else:
             return JsonResponse({"status": "error"})
     else:
