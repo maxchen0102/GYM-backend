@@ -129,4 +129,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/sign_in/'  # 登入頁面
 SESSION_COOKIE_NAME = 'sessionidG'  # sessionid cookie名稱
 SESSION_COOKIE_AGE = 1000  # sessionid cookie過期時間
+
+
 CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    # Add other origins as needed
+]

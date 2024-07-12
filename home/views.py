@@ -9,11 +9,11 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from utils import is_admin
 from django.contrib.auth import logout
-from .forms import UserCreationForm
-
+import json
 
 # Create your views here.
 # Create your views here.
+
 
 def home(request):
     return redirect('sign_in')
@@ -41,6 +41,11 @@ def sign_in(request):
 
 @csrf_exempt
 def sign_up(request):
+    # data = json.loads(request.body)
+    # username = data.get('username')
+    # password1 = data.get('password1')
+    # password2 = data.get('password2')
+    print(request.POST)
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -53,6 +58,7 @@ def sign_up(request):
                 login(request, user)
                 return redirect('introduce_page')
         else:
+            print(form.errors)  # 印出錯誤訊息
             return JsonResponse({"status": "error"})
     else:
 
