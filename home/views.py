@@ -41,11 +41,9 @@ def sign_in(request):
 
 @csrf_exempt
 def sign_up(request):
-    # data = json.loads(request.body)
-    # username = data.get('username')
-    # password1 = data.get('password1')
-    # password2 = data.get('password2')
-    print(request.POST)
+    username=request.POST.get('username')
+    password1=request.POST.get('password1')
+    password2=request.POST.get('password2')
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
