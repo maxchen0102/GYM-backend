@@ -137,3 +137,4 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     # Add other origins as needed
 ]
+CORS_ALLOW_CREDENTIALS = True  # 允許攜帶 cookie
