@@ -31,27 +31,22 @@ def sign_in(request):
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password')
 
-            user = authenticate(username=username, password=raw_password)
-            print(username, raw_password)
-            #user = form.get_user()
-            login(request, user)
-            #return redirect('introduce_page')
+            user = authenticate(request, username=username, password=raw_password)
+            if user is not None:
+                login(request, user)
             print("ok")
             return JsonResponse({"status": "success"}, status=200)
 
         else:
             return JsonResponse({"status": "error"})
-    else:
-        form = AuthenticationForm()
-
-        return render(request, 'login.html', {'form': form})
+    # else:
+    #     form = AuthenticationForm()
+    #
+    #     return render(request, 'login.html', {'form': form})
 
 
 @csrf_exempt
 def sign_up(request):
-    username=request.POST.get('username')
-    password1=request.POST.get('password1')
-    password2=request.POST.get('password2')
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():

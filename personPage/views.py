@@ -1,10 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 import json
 from .models import Category, Item, List
 from utils import hello_decorator
-
+import logging
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.exceptions import APIException
@@ -19,9 +20,21 @@ def personPage(request):
     return JsonResponse({"status": "success"})
 
 
+logger = logging.getLogger(__name__)
+
 # 取得分類
 @csrf_exempt
 def getPersonalCategory(request):
+    print("=====================================")
+    print(f"Is user authenticated: {request.user.is_authenticated}")
+    print(f"User: {request.user}")
+    logger.info(f"User: {request.user}")
+    logger.info(f"Authenticated: {request.user.is_authenticated}")
+    logger.info(f"Session: {request.session.items()}")
+
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+
     data = json.loads(request.body)
     UUID = data.get('UUID')
     categories = Category.objects.filter(UUID=UUID)

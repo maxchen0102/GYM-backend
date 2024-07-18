@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -127,9 +128,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # my config
 LOGIN_URL = '/sign_in/'  # 登入頁面
-SESSION_COOKIE_NAME = 'sessionidG'  # sessionid cookie名稱
+SESSION_COOKIE_NAME = 'sessionid'  # sessionid cookie名稱
 SESSION_COOKIE_AGE = 1000  # sessionid cookie過期時間
-
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_SECURE = True  # 如果使用 HTTPS
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'  # 或 'None' 如果需要跨站點
 
 CORS_ALLOW_ALL_ORIGINS = True
 
